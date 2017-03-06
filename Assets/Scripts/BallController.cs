@@ -6,23 +6,30 @@ using UnityEngine.SceneManagement;
 public class BallController : MonoBehaviour {
 
 	private Rigidbody body;
+	private bool falling = false;
 
 	public float speed = 30;
 
 	void Start () {
 		body = this.GetComponent<Rigidbody>();
-
 	}
 
 	void FixedUpdate () {
 
-		float horizontal = Input.GetAxis ("Horizontal");
-		float vertical = Input.GetAxis ("Vertical");
+		if (!falling && Input.GetButtonDown("Jump")) {
+			body.useGravity = true;
+			falling = true;
+		}
 
-		body.AddForce (new Vector3(horizontal*speed,vertical*speed,0));
+		if(!falling)
+		{
+			float horizontal = Input.GetAxis ("Horizontal");
+			//float vertical = Input.GetAxis ("Vertical");
 
-		//Debug.Log (horizontal);
+			body.AddForce (new Vector3(horizontal*speed,0,0));
 
+			//Debug.Log (horizontal);
+		}
 	}
 
 	void OnCollisionEnter(Collision collision)
